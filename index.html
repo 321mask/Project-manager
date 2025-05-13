@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestionnaire de Projets</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="app-container">
+      <header class="app-header">
+        <h1><i class="fas fa-tasks"></i> Gestionnaire de Projets</h1>
+        <div class="header-actions">
+          <button id="new-project-btn" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Nouveau Projet
+          </button>
+          <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle">
+              <i class="fas fa-cog"></i> Options
+            </button>
+            <div class="dropdown-menu">
+              <a href="#" id="export-data">Exporter les données</a>
+              <a href="#" id="import-data">Importer les données</a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="main-content">
+        <aside class="sidebar">
+          <div class="sidebar-header">
+            <h2>Projets</h2>
+            <div class="search-container">
+              <input
+                type="text"
+                id="project-search"
+                placeholder="Rechercher..."
+              />
+            </div>
+          </div>
+          <div id="projects-list" class="projects-list">
+            <!-- Projets injectés dynamiquement ici -->
+          </div>
+        </aside>
+
+        <main class="content">
+          <div id="dashboard-view" class="view">
+            <h2>Tableau de Bord</h2>
+            <div class="dashboard-stats">
+              <div class="stat-card">
+                <h3>Projets Actifs</h3>
+                <div id="active-projects-count" class="stat-value">0</div>
+              </div>
+              <div class="stat-card">
+                <h3>Tâches en Cours</h3>
+                <div id="ongoing-tasks-count" class="stat-value">0</div>
+              </div>
+              <div class="stat-card">
+                <h3>Tâches Terminées</h3>
+                <div id="completed-tasks-count" class="stat-value">0</div>
+              </div>
+              <div class="stat-card">
+                <h3>Tâches Bloquées</h3>
+                <div id="blocked-tasks-count" class="stat-value">0</div>
+              </div>
+            </div>
+            <div class="charts-container">
+              <div class="chart-card">
+                <h3>Répartition des Tâches</h3>
+                <div id="tasks-distribution" class="chart"></div>
+              </div>
+              <div class="chart-card">
+                <h3>Projets par Date Limite</h3>
+                <div id="deadline-chart" class="chart"></div>
+              </div>
+            </div>
+            <div class="recent-activity">
+              <h3>Activité Récente</h3>
+              <ul id="activity-list">
+                <!-- Activités récentes injectées dynamiquement ici -->
+              </ul>
+            </div>
+          </div>
+
+          <div id="project-view" class="view hidden">
+            <div class="project-header">
+              <h2 id="project-title">Titre du Projet</h2>
+              <div class="project-actions">
+                <button id="edit-project-btn" class="btn btn-secondary">
+                  <i class="fas fa-edit"></i> Modifier
+                </button>
+                <button id="delete-project-btn" class="btn btn-danger">
+                  <i class="fas fa-trash"></i> Supprimer
+                </button>
+              </div>
+            </div>
+            <div class="project-details">
+              <div class="detail-item">
+                <span class="detail-label">Client:</span>
+                <span id="project-client"></span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Date limite:</span>
+                <span id="project-deadline"></span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Progression:</span>
+                <div class="progress-bar">
+                  <div id="project-progress" class="progress-value"></div>
+                </div>
+                <span id="progress-percentage">0%</span>
+              </div>
+            </div>
+            <div class="project-description">
+              <h3>Description</h3>
+              <p id="project-description"></p>
+            </div>
+
+            <div class="tasks-section">
+              <div class="tasks-header">
+                <h3>Tâches</h3>
+                <button id="new-task-btn" class="btn btn-primary">
+                  <i class="fas fa-plus"></i> Nouvelle Tâche
+                </button>
+              </div>
+              <div class="task-filters">
+                <div class="filter-group">
+                  <label for="status-filter">Statut:</label>
+                  <select id="status-filter">
+                    <option value="all">Tous</option>
+                    <option value="todo">À faire</option>
+                    <option value="in-progress">En cours</option>
+                    <option value="completed">Terminée</option>
+                    <option value="blocked">Bloquée</option>
+                  </select>
+                </div>
+                <div class="filter-group">
+                  <label for="priority-filter">Priorité:</label>
+                  <select id="priority-filter">
+                    <option value="all">Toutes</option>
+                    <option value="high">Haute</option>
+                    <option value="medium">Moyenne</option>
+                    <option value="low">Basse</option>
+                  </select>
+                </div>
+                <div class="filter-group">
+                  <label for="assignee-filter">Assigné à:</label>
+                  <select id="assignee-filter">
+                    <option value="all">Tous</option>
+                    <!-- Options injectées dynamiquement -->
+                  </select>
+                </div>
+              </div>
+              <div id="tasks-list" class="tasks-list">
+                <!-- Tâches injectées dynamiquement ici -->
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Modales -->
+    <div id="project-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2 id="project-modal-title">Nouveau Projet</h2>
+        <form id="project-form">
+          <div class="form-group">
+            <label for="project-form-title">Titre</label>
+            <input type="text" id="project-form-title" required />
+          </div>
+          <div class="form-group">
+            <label for="project-form-client">Client</label>
+            <input type="text" id="project-form-client" required />
+          </div>
+          <div class="form-group">
+            <label for="project-form-deadline">Date limite</label>
+            <input type="date" id="project-form-deadline" required />
+          </div>
+          <div class="form-group">
+            <label for="project-form-description">Description</label>
+            <textarea id="project-form-description" rows="4"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary cancel-modal">
+              Annuler
+            </button>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="task-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2 id="task-modal-title">Nouvelle Tâche</h2>
+        <form id="task-form">
+          <div class="form-group">
+            <label for="task-form-title">Titre</label>
+            <input type="text" id="task-form-title" required />
+          </div>
+          <div class="form-group">
+            <label for="task-form-description">Description</label>
+            <textarea id="task-form-description" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="task-form-priority">Priorité</label>
+            <select id="task-form-priority" required>
+              <option value="high">Haute</option>
+              <option value="medium" selected>Moyenne</option>
+              <option value="low">Basse</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="task-form-status">Statut</label>
+            <select id="task-form-status" required>
+              <option value="todo" selected>À faire</option>
+              <option value="in-progress">En cours</option>
+              <option value="completed">Terminée</option>
+              <option value="blocked">Bloquée</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="task-form-assignee">Assigné à</label>
+            <input type="text" id="task-form-assignee" />
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary cancel-modal">
+              Annuler
+            </button>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="confirm-modal" class="modal">
+      <div class="modal-content">
+        <h2>Confirmation</h2>
+        <p id="confirm-message">
+          Êtes-vous sûr de vouloir effectuer cette action ?
+        </p>
+        <div class="form-actions">
+          <button id="cancel-confirm" class="btn btn-secondary">Annuler</button>
+          <button id="confirm-action" class="btn btn-danger">Confirmer</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="import-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Importer des données</h2>
+        <form id="import-form">
+          <div class="form-group">
+            <label for="import-data-textarea"
+              >Collez les données JSON ici</label
+            >
+            <textarea id="import-data-textarea" rows="10" required></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary cancel-modal">
+              Annuler
+            </button>
+            <button type="submit" class="btn btn-primary">Importer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Chargement des scripts -->
+    <script type="module" src="js/utils/helpers.js"></script>
+    <script type="module" src="js/utils/events.js"></script>
+    <script type="module" src="js/models/storageService.js"></script>
+    <script type="module" src="js/models/projectModel.js"></script>
+    <script type="module" src="js/models/taskModel.js"></script>
+    <script type="module" src="js/views/dashboard.js"></script>
+    <script type="module" src="js/views/projectList.js"></script>
+    <script type="module" src="js/views/projectDetail.js"></script>
+    <script type="module" src="js/views/taskList.js"></script>
+    <script type="module" src="js/views/forms.js"></script>
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
