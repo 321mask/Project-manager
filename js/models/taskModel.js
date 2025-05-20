@@ -2,7 +2,7 @@
 import StorageService from "./storageService.js";
 
 const TaskModel = (() => {
-  let tasks = StorageService.load("tasks") || [];
+  let tasks = StorageService.get("tasks") || [];
 
   const saveTasks = () => StorageService.save("tasks", tasks);
 

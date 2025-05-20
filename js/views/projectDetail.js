@@ -1,7 +1,7 @@
 import ProjectModel from "../models/projectModel.js";
 import TaskModel from "../models/taskModel.js";
 import EventBus from "../utils/events.js";
-import { formatDate } from "../utils/helpers.js";
+import Helpers from "../utils/helpers.js";
 
 const ProjectDetail = (() => {
   const titleEl = document.getElementById("project-title");
@@ -18,7 +18,7 @@ const ProjectDetail = (() => {
 
     titleEl.textContent = project.title;
     clientEl.textContent = project.client;
-    deadlineEl.textContent = formatDate(project.deadline);
+    deadlineEl.textContent = Helpers.formatDate(project.deadline);
     descriptionEl.textContent = project.description;
 
     const tasks = TaskModel.getTasksByProject(projectId);

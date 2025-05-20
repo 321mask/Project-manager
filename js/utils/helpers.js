@@ -248,3 +248,4 @@ const Helpers = (function () {
     createBadge,
   };
 })();
+export default Helpers;

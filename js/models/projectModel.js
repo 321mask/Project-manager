@@ -1,6 +1,10 @@
 /**
  * Module de gestion des projets
  */
+import Helpers from "../utils/helpers.js";
+import StorageService from "./storageService.js";
+import EventEmitter from "../utils/events.js";
+
 const ProjectModel = (function () {
   // Stockage local des projets
   let projects = [];
@@ -217,3 +221,4 @@ const ProjectModel = (function () {
     EVENTS,
   };
 })();
+export default ProjectModel;

@@ -101,3 +101,4 @@ const EventEmitter = (function () {
     debug,
   };
 })();
+export default EventEmitter;

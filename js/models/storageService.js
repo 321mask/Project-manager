@@ -127,3 +127,4 @@ const StorageService = (function () {
     clearAllData,
   };
 })();
+export default StorageService;
